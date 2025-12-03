@@ -6,7 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app,
      resources={r"/get_URL": {"origins": [
-         "http://127.0.0.1:3000", "http://localhost:3000"
+         "http://localhost:5173/", "https://cloud-upload-frontend.vercel.app/"
      ]}},
      allow_headers=["Content-Type", "Authorization"],
      methods=["POST", "OPTIONS"])
