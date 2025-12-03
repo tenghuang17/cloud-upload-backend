@@ -3,6 +3,16 @@ import os, boto3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+api_key = os.environ.get("API_KEY")
+print("Backend API_KEY:", api_key)
+
+s3_client = boto3.client("s3")
+# boto3自動讀export 的環境變數
+#  如果只有一個client  不須再寫os.environ
+#  export AWS_ACCESS_KEY_ID="你的 access key"
+#  export AWS_SECRET_ACCESS_KEY="你的 secret key"
+#  export AWS_DEFAULT_REGION="us-west-2"
+
 app = Flask(__name__)
 CORS(app,
      resources={r"/get_URL": {"origins": [
@@ -11,14 +21,7 @@ CORS(app,
      allow_headers=["Content-Type", "Authorization"],
      methods=["POST", "OPTIONS"])
 
-api_key = os.environ.get("API_KEY") 
 
-s3_client = boto3.client("s3")  
-# boto3自動讀export 的環境變數
-#  如果只有一個client  不須再寫os.environ
-#  export AWS_ACCESS_KEY_ID="你的 access key" 
-#  export AWS_SECRET_ACCESS_KEY="你的 secret key" 
-#  export AWS_DEFAULT_REGION="us-west-2"
 def authorize():
     auth = request.headers.get("Authorization","")
     return (
@@ -50,4 +53,3 @@ def get_URL():
 
 if __name__ == "__main__":
     app.run(port = 5000, host = "0.0.0.0")
-    print("Backend API_KEY:", api_key)
