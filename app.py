@@ -20,7 +20,7 @@ def get_URL():
     data = request.get_json(silent=True)
     # 讀headers:  request.headers.get()
     # 遇無效JSON不丟錯，回傳 None   data==送過來的整個body
-if data is None:
+    if data is None:
         return jsonify({"error": "Invalid or missing JSON body"}), 400
     filename = data.get("filename")
     content_type = data.get("contentType", "application/octet-stream")
