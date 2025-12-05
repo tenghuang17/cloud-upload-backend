@@ -11,7 +11,6 @@ app = Flask(__name__)
 CORS(app,
      resources={r"/get_URL": {"origins": [
          "http://localhost:5173",
-         "https://cloud-upload-frontend-p7oj8bgxb-tenghuangs-projects.vercel.app",
          "https://cloud-upload-frontend.vercel.app"
      ]}},
      allow_headers=["Content-Type", "Authorization"],
