@@ -38,7 +38,7 @@ def get_URL():
 @app.route("/direct_uploadS3", methods=["POST"])
 def direct_uploadS3():
     if "file" not in request.files:
-	return jsonify({"error": "missing file"}),400
+        return jsonify({"error": "missing file"}), 400
 
     file = request.files["file"]
     key = request.form["filename"]
@@ -47,7 +47,7 @@ def direct_uploadS3():
     )
     return jsonify({
 	"message":"upload to s3 success",
-	"key":key,
+	"key":key
     })
 
 if __name__ == "__main__":
