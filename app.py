@@ -41,7 +41,7 @@ def direct_uploadS3():
         return jsonify({"error": "missing file"}), 400
 
     file = request.files["file"]
-    key = request.form["filename"]
+    key = request.form["filename"] or file.filename
     s3_client.upload_fileobj(
     	Fileobj = file, Bucket = bucket_name, Key = key
     )
