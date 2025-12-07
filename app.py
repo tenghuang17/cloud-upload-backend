@@ -42,7 +42,7 @@ def direct_uploadS3():
 
     file = request.files["file"]
     key = request.form["filename"]
-    s3_client.upload_fileojb(
+    s3_client.upload_fileobj(
     	Fileojb = file, Bucket = bucket_name, Key = key
     )
     return jsonify({
