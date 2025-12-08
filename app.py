@@ -49,6 +49,14 @@ def direct_uploadS3():
 	"message":"upload to s3 success",
 	"key":key
     })
+@app.route("/upload_success",method=["POST"])
+def upload_success():
+    data = request.get_json()
+    filename = data["filename"]
+    bucket = data["bucket"]
+
+    print("got upload success noitce")
+    return {"status":"recieved"}
 
 if __name__ == "__main__":
     app.run(port = 5000, host = "0.0.0.0")
