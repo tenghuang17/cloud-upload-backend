@@ -49,7 +49,7 @@ def direct_uploadS3():
 	"message":"upload to s3 success",
 	"key":key
     })
-@app.route("/upload_success",method=["POST"])
+@app.route("/upload_success",methods=["POST"])
 def upload_success():
     data = request.get_json()
     filename = data["filename"]
