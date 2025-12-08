@@ -10,7 +10,8 @@ bucket_name = "upload-demo-nick"
 
 app = Flask(__name__)
 CORS(app,
-     resources={r"/get_URL": {"origins": [
+     resources={r"/*": {"origins": [
+     #resources={r"/get_URL"....  *代表放行全部endpoint
          "http://localhost:5173",
          "https://cloud-upload-frontend.vercel.app"
      ]}},
