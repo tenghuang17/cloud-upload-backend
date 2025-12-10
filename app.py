@@ -19,7 +19,7 @@ CORS(app,
      ]}},
      allow_headers=["Content-Type", "Authorization"],
      methods=["POST", "OPTIONS"])
-def unified_filename_to_s3key():
+def unified_filename_to_s3key(filename):
     #  日期資料夾，例如：20250120
     date_prefix = datetime.utcnow().strftime("%Y%m%d")
     # UUID  (32 字  hex，不含 dash)
