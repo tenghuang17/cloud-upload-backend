@@ -19,6 +19,7 @@ CORS(app,
      ]}},
      allow_headers=["Content-Type", "Authorization"],
      methods=["POST", "OPTIONS"])
+
 def unified_filename_to_s3key(filename):
     #  日期資料夾，例如：20250120
     date_prefix = datetime.utcnow().strftime("%Y%m%d")
@@ -45,7 +46,6 @@ def get_URL():
         Params={"Bucket": bucket_name, "Key": s3_key, "ContentType": content_type},
         ExpiresIn=120  # 有效時間 (秒)
     )
-
     return jsonify({"presigned_url": presigned_url, "key": s3_key}), 200
 
 @app.route("/direct_uploadS3", methods=["POST"])
