@@ -6,7 +6,9 @@ from flask_cors import CORS
 from datetime import datetime
 
 s3_client = boto3.client("s3")
+sqs_client = boto3.client("sqs")
 bucket_name = "upload-demo-nick"
+QUEUE_URL = "https://sqs.ap-northeast-1.amazonaws.com/858949074941/Request_Queue"
 #  boto3自動讀export 的環境變數、 只有一個client 不須寫os.environ
 #  export AWS_ACCESS_KEY_ID、AWS_SECRET_ACCESS_KEY、AWS_DEFAULT_REGION
 
@@ -66,11 +68,21 @@ def direct_uploadS3():
 @app.route("/upload_success",methods=["POST"])
 def upload_success():   #收前端通知 : 上傳s3成功
     data = request.get_json()
-    s3_key = data["key"]
-    bucket = data["bucket"]
-
+    s3_key = data["key"]      # 前端最後回傳的資訊 s3 key等 看需要哪些組成message後   
+    bucket = data["bucket"]                     #    SQS(message)-->  worker 下載後 解密  寫回 s3
     print("got upload success noitce")
-    return {"status":"recieved"}
+
+    message = {
+        "bucket": bucket,
+        "key": s3_key,
+        "action": "decrypt"
+    }
+    sqs_client.send_message(         # message immutable  <= 256 KB
+        QueueUrl=QUEUE_URL,          # MessageBody has to be string    python dict(x)
+        MessageBody=json.dumps(message)    # json.dumps    Python objext ->  string
+    )                                      # json.loads    string  -> python object
+
+    return {"status":"message_sent_to_worker"}
 
 if __name__ == "__main__":
     app.run(port = 5000, host = "0.0.0.0")
