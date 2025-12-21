@@ -14,14 +14,14 @@ QUEUE_URL = "https://sqs.ap-northeast-1.amazonaws.com/858949074941/Request_Queue
 #  export AWS_ACCESS_KEY_ID、AWS_SECRET_ACCESS_KEY、AWS_DEFAULT_REGION
 
 app = Flask(__name__)
-CORS(app,
-     resources={r"/*": {"origins": [    #cors 無法阻擋curl
-     #resources={r"/get_URL"....  *代表放行全部endpoint  
-         "http://localhost:5173",
-         "https://cloud-upload-frontend.vercel.app"
-     ]}},
-     allow_headers=["Content-Type", "Authorization"],
-     methods=["POST", "OPTIONS"])
+CORS(
+    app,
+    origins=[
+        "http://localhost:5173",
+        "https://cloud-upload-frontend.vercel.app"
+    ],
+    supports_credentials=True
+)
 
 def unified_filename_to_s3key(filename):
     #  日期資料夾，例如：20250120
@@ -67,7 +67,7 @@ def direct_uploadS3():
     })
 
 @app.route("/upload_success",methods=["POST"])
-def upload_success():   #收前端通知 : 上傳s3成功
+def upload_success():   # 收前端通知 : 上傳s3成功
     data = request.get_json()
     s3_key = data["key"]      # 前端最後回傳的資訊 s3 key等 看需要哪些組成message後   
     bucket = data["bucket"]                     #    SQS(message)-->  worker 下載後 解密  寫回 s3
@@ -79,7 +79,7 @@ def upload_success():   #收前端通知 : 上傳s3成功
         "action": "decrypt"
     }
     sqs_client.send_message(         # message immutable  <= 256 KB
-        QueueUrl=QUEUE_URL,          # MessageBody has to be string    python dict(x)
+        QueueUrl=QUEUE_URL,          # MessageBody has to be string     can't be python dict
         MessageBody=json.dumps(message)    # json.dumps    Python objext ->  string
     )                                      # json.loads    string  -> python object
 
