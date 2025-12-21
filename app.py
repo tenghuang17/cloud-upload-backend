@@ -15,8 +15,8 @@ QUEUE_URL = "https://sqs.ap-northeast-1.amazonaws.com/858949074941/Request_Queue
 
 app = Flask(__name__)
 CORS(app,
-     resources={r"/*": {"origins": [
-     #resources={r"/get_URL"....  *代表放行全部endpoint
+     resources={r"/*": {"origins": [    #cors 無法阻擋curl
+     #resources={r"/get_URL"....  *代表放行全部endpoint  
          "http://localhost:5173",
          "https://cloud-upload-frontend.vercel.app"
      ]}},
@@ -36,7 +36,7 @@ def unified_filename_to_s3key(filename):
 def get_URL():
     data = request.get_json(silent=True)
     # 讀headers:    request.headers.get()
-    # 讀body (Json) request.get_json()  (formdata)requst.files["file"]
+    # 讀body (Json) request.get_json() // (formdata)requst.files["file"]
     # 遇無效JSON不丟錯，回傳None   data==送過來的整個body(JSON)格式
     if data is None:
         return jsonify({"error": "Invalid or missing JSON body"}), 400
